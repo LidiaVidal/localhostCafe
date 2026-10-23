@@ -1,0 +1,21 @@
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import pg from "pg";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+
+const { Pool } = pg;
+
+export const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: Number(process.env.DB_PORT) || 5432,
+});
+
+pool.on("error", (erro) => {
+    console.error("Erro inesperado no Pool do PostgreSQL:", erro);
+});
